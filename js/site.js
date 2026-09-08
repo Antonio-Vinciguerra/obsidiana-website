@@ -1,184 +1,170 @@
 (() => {
+  'use strict';
+  const $ = (selector) => document.querySelector(selector);
   const config = window.OBSIDIANA_CONFIG || {};
-  const header = document.querySelector('[data-header]');
-  const contactLink = document.querySelector('[data-contact-link]');
-  const mobileNav = document.querySelector('.mobile-nav');
-  const languageMenu = document.querySelector('[data-language-menu]');
-  const currentLanguage = document.querySelector('[data-current-language]');
-
-  const translations = {
+  const wines = [
+    { name: 'OMBRA', type: 'Rosso' }, { name: 'MERIDIO', type: 'Bianco' },
+    { name: 'BREZZA', type: 'Sparkling White' }, { name: 'AURA', type: 'Sparkling Rosé' }
+  ];
+  const copy = {
     it: {
-      locale: 'it_IT', metaDescription: 'OBSIDIANA è una maison mediterranea nata da una sensibilità siciliana. Quattro espressioni di vino, una sola idea di misura.',
-      socialDescription: 'La Sicilia è l’origine. Il Mediterraneo è il mondo. Il vino è la prima espressione.', twitterDescription: 'Una terra intensa. Un’eleganza naturale.',
-      skip: 'Vai al contenuto', homeAria: "OBSIDIANA — torna all’inizio", mainNavAria: 'Navigazione principale', mobileNavAria: 'Navigazione mobile', footerNavAria: 'Navigazione nel piè di pagina', menuAria: 'Apri il menu', languageAria: 'Seleziona la lingua',
-      navMaison: 'La Maison', navCollection: 'La Collezione', navMaterial: 'La Materia', navExperience: 'L’Esperienza', navContact: 'Contatti',
-      heroTitle: 'Una terra intensa.<br>Un’eleganza naturale.', discoverMaison: 'Scopri la maison', scroll: 'Scorri', scrollAria: 'Scorri verso La Maison',
-      maisonTitle: 'La Sicilia è l’origine.<br>Il Mediterraneo è il mondo.', maisonBody: 'OBSIDIANA nasce da una sensibilità siciliana e guarda al Mediterraneo: alla sua luce, alle sue materie, al suo modo di vivere il tempo.', maisonClose: 'Il vino è la prima espressione di questo sguardo.',
-      collectionTitle: 'Quattro espressioni,<br>una maison.', collectionBody: 'Quattro vini, un’unica idea di misura. Caratteri diversi, la stessa origine, lo stesso sguardo sul Mediterraneo.',
-      ombraType: 'Etna Rosso', meridioType: 'Etna Bianco', brezzaType: 'Bollicine bianche', auraType: 'Bollicine rosé',
-      materialTitle: 'Il dettaglio<br>fa la differenza.', materialBody: 'Carta naturale. Superfici opache. Un segno sottile in oro discreto.', materialClose: 'Ogni elemento è scelto per come risponde alla luce, non per come appare in fotografia.', materialPaper: 'Carta', materialLight: 'Luce', materialDetail: 'Dettaglio', materialListAria: 'Principi materici',
-      experienceKicker: 'L’Esperienza · Il Dono', experienceTitle: 'Un gesto<br>che resta.', experienceBody: 'Una bottiglia da portare a cena.<br>Un dono personale.<br>Un’attenzione di lavoro.', experienceClose: 'L’esperienza comincia prima che la bottiglia venga aperta.',
-      contactTitle: 'Iniziamo una conversazione.', contactBody: 'Per informazioni sulla maison e sulla collezione, per collaborazioni o semplicemente per conoscerci.', contactCta: 'Scrivi alla maison',
-      heroAlt: 'Una soglia in pietra affacciata sul mare mediterraneo', oliveAlt: "Ramo d’ulivo nella luce mediterranea su una parete materica", thresholdAlt: 'Una soglia architettonica attraversata da una luce calda', collectionAlt: 'Le quattro bottiglie OBSIDIANA: OMBRA, MERIDIO, BREZZA e AURA', paperAlt: 'Carta naturale color avorio con un sottile dettaglio in oro opaco', giftAlt: 'Cofanetto OBSIDIANA nero con bottiglia e biglietto su una superficie materica', shippingAlt: 'Packaging OBSIDIANA progettato per proteggere la consegna'
+      locale:'it_IT', skip:'Vai ai vini', homeAria:'OBSIDIANA — inizio', navAria:'Navigazione principale', mobileAria:'Navigazione mobile', menuAria:'Apri il menu', languageAria:'Seleziona la lingua',
+      maison:'La Maison', collection:'I vini', contact:'Contatti', experience:'L’esperienza', collectionKicker:'La collezione',
+      heroLine1:'Il Mediterraneo,', heroLine2:'da vivere.', exploreWines:'Esplora i vini', scroll:'Scorri per entrare',
+      maisonLine1:'La Sicilia è l’origine.', maisonLine2:'Il Mediterraneo è il mondo.', collectionTitle:'Quattro espressioni. Una maison.',
+      experienceLine:'Il piacere di restare.', experienceAria:'Il tempo condiviso', contactTitle:'Il prossimo calice, insieme.', write:'Scrivici',
+      close:'Chiudi', enquire:'Informazioni su questo vino', prev:'Vino precedente', next:'Vino successivo', explore:'Esplora', subject:'Informazioni sulla collezione OBSIDIANA',
+      seaAlt:'Luce sul mare mediterraneo', thresholdAlt:'Una soglia di pietra scura attraversata da luce dorata', oliveAlt:'Ombre d’ulivo sulla pietra chiara', tableAlt:'Una bottiglia aperta di AURA e due calici di rosé fresco sul Mediterraneo al tramonto', region:'SICILIA · MEDITERRANEO'
     },
     en: {
-      locale: 'en_GB', metaDescription: 'OBSIDIANA is a Mediterranean maison born from a Sicilian sensibility. Four wine expressions, one distinctive sense of measure.',
-      socialDescription: 'Sicily is the origin. The Mediterranean is the world. Wine is the first expression.', twitterDescription: 'An intense land. A natural elegance.',
-      skip: 'Skip to content', homeAria: 'OBSIDIANA — return to the beginning', mainNavAria: 'Main navigation', mobileNavAria: 'Mobile navigation', footerNavAria: 'Footer navigation', menuAria: 'Open menu', languageAria: 'Select language',
-      navMaison: 'The Maison', navCollection: 'The Collection', navMaterial: 'The Material', navExperience: 'The Experience', navContact: 'Contact',
-      heroTitle: 'An intense land.<br>A natural elegance.', discoverMaison: 'Discover the maison', scroll: 'Scroll', scrollAria: 'Scroll to The Maison',
-      maisonTitle: 'Sicily is the origin.<br>The Mediterranean is the world.', maisonBody: 'OBSIDIANA is born from a Sicilian sensibility and looks to the Mediterranean: to its light, its materials and its way of experiencing time.', maisonClose: 'Wine is the first expression of this perspective.',
-      collectionTitle: 'Four expressions,<br>one maison.', collectionBody: 'Four wines, one distinctive sense of measure. Different characters, the same origin, the same Mediterranean outlook.',
-      ombraType: 'Etna Red', meridioType: 'Etna White', brezzaType: 'White sparkling wine', auraType: 'Rosé sparkling wine',
-      materialTitle: 'The difference<br>is in the detail.', materialBody: 'Natural paper. Matt surfaces. A fine accent of discreet gold.', materialClose: 'Every element is chosen for the way it responds to light, not for the way it appears in a photograph.', materialPaper: 'Paper', materialLight: 'Light', materialDetail: 'Detail', materialListAria: 'Material principles',
-      experienceKicker: 'The Experience · The Gift', experienceTitle: 'A gesture<br>that remains.', experienceBody: 'A bottle to bring to dinner.<br>A personal gift.<br>A thoughtful business gesture.', experienceClose: 'The experience begins before the bottle is opened.',
-      contactTitle: 'Let’s begin a conversation.', contactBody: 'For information about the maison and the collection, for collaborations or simply to get to know us.', contactCta: 'Write to the maison',
-      heroAlt: 'A stone threshold overlooking the Mediterranean Sea', oliveAlt: 'An olive branch in Mediterranean light against a textured wall', thresholdAlt: 'An architectural threshold crossed by warm light', collectionAlt: 'The four OBSIDIANA bottles: OMBRA, MERIDIO, BREZZA and AURA', paperAlt: 'Natural ivory paper with a fine matt-gold detail', giftAlt: 'Black OBSIDIANA gift box with bottle and card on a textured surface', shippingAlt: 'OBSIDIANA packaging designed to protect the delivery'
+      locale:'en_GB', skip:'Skip to the wines', homeAria:'OBSIDIANA — home', navAria:'Main navigation', mobileAria:'Mobile navigation', menuAria:'Open menu', languageAria:'Select language',
+      maison:'The Maison', collection:'The wines', contact:'Contact', experience:'The experience', collectionKicker:'The collection',
+      heroLine1:'The Mediterranean,', heroLine2:'a way of life.', exploreWines:'Explore the wines', scroll:'Scroll to enter',
+      maisonLine1:'Our roots are Sicilian.', maisonLine2:'Our world is Mediterranean.', collectionTitle:'Four expressions. One maison.',
+      experienceLine:'The pleasure of lingering.', experienceAria:'Time shared', contactTitle:'The next glass, together.', write:'Write to us',
+      close:'Close', enquire:'Enquire about this wine', prev:'Previous wine', next:'Next wine', explore:'Explore', subject:'Enquiry about the OBSIDIANA collection',
+      seaAlt:'Light on the Mediterranean Sea', thresholdAlt:'A dark stone threshold crossed by golden light', oliveAlt:'Olive shadows on pale stone', tableAlt:'An open bottle of AURA and two glasses of chilled sparkling rosé on a Mediterranean terrace at sunset', region:'SICILY · MEDITERRANEAN'
     },
     es: {
-      locale: 'es_ES', metaDescription: 'OBSIDIANA es una maison mediterránea nacida de una sensibilidad siciliana. Cuatro expresiones de vino, una misma idea de mesura.',
-      socialDescription: 'Sicilia es el origen. El Mediterráneo es el mundo. El vino es la primera expresión.', twitterDescription: 'Una tierra intensa. Una elegancia natural.',
-      skip: 'Ir al contenido', homeAria: 'OBSIDIANA — volver al inicio', mainNavAria: 'Navegación principal', mobileNavAria: 'Navegación móvil', footerNavAria: 'Navegación del pie de página', menuAria: 'Abrir el menú', languageAria: 'Seleccionar idioma',
-      navMaison: 'La Maison', navCollection: 'La Colección', navMaterial: 'La Materia', navExperience: 'La Experiencia', navContact: 'Contacto',
-      heroTitle: 'Una tierra intensa.<br>Una elegancia natural.', discoverMaison: 'Descubre la maison', scroll: 'Desliza', scrollAria: 'Desliza hasta La Maison',
-      maisonTitle: 'Sicilia es el origen.<br>El Mediterráneo es el mundo.', maisonBody: 'OBSIDIANA nace de una sensibilidad siciliana y mira al Mediterráneo: a su luz, a sus materias y a su forma de vivir el tiempo.', maisonClose: 'El vino es la primera expresión de esta mirada.',
-      collectionTitle: 'Cuatro expresiones,<br>una maison.', collectionBody: 'Cuatro vinos, una misma idea de mesura. Caracteres distintos, el mismo origen, la misma mirada al Mediterráneo.',
-      ombraType: 'Etna Tinto', meridioType: 'Etna Blanco', brezzaType: 'Espumoso blanco', auraType: 'Espumoso rosado',
-      materialTitle: 'El detalle<br>marca la diferencia.', materialBody: 'Papel natural. Superficies mate. Un fino acento de oro discreto.', materialClose: 'Cada elemento se elige por cómo responde a la luz, no por cómo aparece en una fotografía.', materialPaper: 'Papel', materialLight: 'Luz', materialDetail: 'Detalle', materialListAria: 'Principios matéricos',
-      experienceKicker: 'La Experiencia · El Regalo', experienceTitle: 'Un gesto<br>que permanece.', experienceBody: 'Una botella para llevar a una cena.<br>Un regalo personal.<br>Una atención profesional.', experienceClose: 'La experiencia comienza antes de abrir la botella.',
-      contactTitle: 'Iniciemos una conversación.', contactBody: 'Para información sobre la maison y la colección, para colaboraciones o simplemente para conocernos.', contactCta: 'Escribe a la maison',
-      heroAlt: 'Un umbral de piedra con vistas al mar Mediterráneo', oliveAlt: 'Una rama de olivo bajo la luz mediterránea sobre una pared con textura', thresholdAlt: 'Un umbral arquitectónico atravesado por una luz cálida', collectionAlt: 'Las cuatro botellas OBSIDIANA: OMBRA, MERIDIO, BREZZA y AURA', paperAlt: 'Papel natural color marfil con un fino detalle en oro mate', giftAlt: 'Estuche negro OBSIDIANA con botella y tarjeta sobre una superficie con textura', shippingAlt: 'Packaging OBSIDIANA diseñado para proteger la entrega'
+      locale:'es_ES', skip:'Ir a los vinos', homeAria:'OBSIDIANA — inicio', navAria:'Navegación principal', mobileAria:'Navegación móvil', menuAria:'Abrir el menú', languageAria:'Seleccionar idioma',
+      maison:'La Maison', collection:'Los vinos', contact:'Contacto', experience:'La experiencia', collectionKicker:'La colección',
+      heroLine1:'El Mediterráneo,', heroLine2:'para vivirlo.', exploreWines:'Explora los vinos', scroll:'Desliza para entrar',
+      maisonLine1:'Sicilia es el origen.', maisonLine2:'El Mediterráneo, nuestro mundo.', collectionTitle:'Cuatro expresiones. Una maison.',
+      experienceLine:'El placer de quedarse.', experienceAria:'El tiempo compartido', contactTitle:'La próxima copa, juntos.', write:'Escríbenos',
+      close:'Cerrar', enquire:'Información sobre este vino', prev:'Vino anterior', next:'Vino siguiente', explore:'Explora', subject:'Información sobre la colección OBSIDIANA',
+      seaAlt:'Luz sobre el mar Mediterráneo', thresholdAlt:'Un umbral de piedra oscura atravesado por luz dorada', oliveAlt:'Sombras de olivo sobre piedra clara', tableAlt:'Una botella abierta de AURA y dos copas de rosado espumoso fresco en una terraza mediterránea al atardecer', region:'SICILIA · MEDITERRÁNEO'
     },
     nl: {
-      locale: 'nl_NL', metaDescription: 'OBSIDIANA is een mediterrane maison, ontstaan vanuit een Siciliaanse gevoeligheid. Vier wijnexpressies, één herkenbaar gevoel voor maat.',
-      socialDescription: 'Sicilië is de oorsprong. De Middellandse Zee is de wereld. Wijn is de eerste expressie.', twitterDescription: 'Een intens land. Een natuurlijke elegantie.',
-      skip: 'Ga naar de inhoud', homeAria: 'OBSIDIANA — terug naar het begin', mainNavAria: 'Hoofdnavigatie', mobileNavAria: 'Mobiele navigatie', footerNavAria: 'Navigatie in de voettekst', menuAria: 'Menu openen', languageAria: 'Taal selecteren',
-      navMaison: 'De Maison', navCollection: 'De Collectie', navMaterial: 'De Materie', navExperience: 'De Ervaring', navContact: 'Contact',
-      heroTitle: 'Een intens land.<br>Een natuurlijke elegantie.', discoverMaison: 'Ontdek de maison', scroll: 'Scroll', scrollAria: 'Scroll naar De Maison',
-      maisonTitle: 'Sicilië is de oorsprong.<br>De Middellandse Zee is de wereld.', maisonBody: 'OBSIDIANA ontstaat uit een Siciliaanse gevoeligheid en richt haar blik op de Middellandse Zee: op haar licht, haar materialen en haar manier om tijd te beleven.', maisonClose: 'Wijn is de eerste expressie van deze blik.',
-      collectionTitle: 'Vier expressies,<br>één maison.', collectionBody: 'Vier wijnen, één gevoel voor maat. Verschillende karakters, dezelfde oorsprong, dezelfde mediterrane blik.',
-      ombraType: 'Etna rood', meridioType: 'Etna wit', brezzaType: 'Witte mousserende wijn', auraType: 'Rosé mousserende wijn',
-      materialTitle: 'Het verschil<br>zit in het detail.', materialBody: 'Natuurlijk papier. Matte oppervlakken. Een verfijnd accent van ingetogen goud.', materialClose: 'Elk element wordt gekozen om de manier waarop het op licht reageert, niet om hoe het op een foto oogt.', materialPaper: 'Papier', materialLight: 'Licht', materialDetail: 'Detail', materialListAria: 'Principes van materialiteit',
-      experienceKicker: 'De Ervaring · Het Geschenk', experienceTitle: 'Een gebaar<br>dat blijft.', experienceBody: 'Een fles om mee te nemen naar een diner.<br>Een persoonlijk geschenk.<br>Een attent zakelijk gebaar.', experienceClose: 'De ervaring begint voordat de fles wordt geopend.',
-      contactTitle: 'Laten we een gesprek beginnen.', contactBody: 'Voor informatie over de maison en de collectie, voor samenwerkingen of gewoon om kennis te maken.', contactCta: 'Schrijf naar de maison',
-      heroAlt: 'Een stenen drempel met uitzicht op de Middellandse Zee', oliveAlt: 'Een olijftak in mediterraan licht tegen een wand met textuur', thresholdAlt: 'Een architectonische drempel waar warm licht doorheen valt', collectionAlt: 'De vier OBSIDIANA-flessen: OMBRA, MERIDIO, BREZZA en AURA', paperAlt: 'Natuurlijk ivoorkleurig papier met een fijn detail in mat goud', giftAlt: 'Zwarte OBSIDIANA-geschenkdoos met fles en kaart op een oppervlak met textuur', shippingAlt: 'OBSIDIANA-verpakking ontworpen om de levering te beschermen'
+      locale:'nl_NL', skip:'Ga naar de wijnen', homeAria:'OBSIDIANA — begin', navAria:'Hoofdnavigatie', mobileAria:'Mobiele navigatie', menuAria:'Menu openen', languageAria:'Taal selecteren',
+      maison:'De Maison', collection:'De wijnen', contact:'Contact', experience:'De beleving', collectionKicker:'De collectie',
+      heroLine1:'Mediterraan,', heroLine2:'een manier van leven.', exploreWines:'Ontdek de wijnen', scroll:'Scroll om binnen te komen',
+      maisonLine1:'Onze oorsprong ligt op Sicilië.', maisonLine2:'Onze wereld is mediterraan.', collectionTitle:'Vier expressies. Eén maison.',
+      experienceLine:'Het plezier van blijven.', experienceAria:'Tijd voor elkaar', contactTitle:'Het volgende glas, samen.', write:'Schrijf ons',
+      close:'Sluiten', enquire:'Meer over deze wijn', prev:'Vorige wijn', next:'Volgende wijn', explore:'Ontdek', subject:'Vraag over de OBSIDIANA-collectie',
+      seaAlt:'Licht op de Middellandse Zee', thresholdAlt:'Een donkere stenen doorgang met een smalle strook gouden licht', oliveAlt:'Olijfschaduwen op lichte steen', tableAlt:'Een geopende fles AURA en twee glazen gekoelde mousserende rosé op een mediterraan terras bij zonsondergang', region:'SICILIË · MIDDELLANDSE ZEE'
     }
   };
-
-  const setMeta = (selector, value) => {
-    const element = document.querySelector(selector);
-    if (element) element.content = value;
-  };
-
-  const setLanguage = (language, persist = false) => {
-    const lang = translations[language] ? language : 'en';
-    const copy = translations[lang];
+  const languageMenu = $('[data-language-menu]');
+  const mobileMenu = $('.mobile-menu');
+  const dialog = $('.wine-dialog');
+  let currentWine = 0;
+  let lang = 'it';
+  const emailHref = (subject) => 'mailto:' + (config.contactEmail || '') + '?subject=' + encodeURIComponent(subject);
+  function updateWine(index) {
+    currentWine = (index + wines.length) % wines.length;
+    const wine = wines[currentWine];
+    $('#wine-dialog-name').textContent = wine.name;
+    $('.dialog-type').textContent = wine.type;
+    const dialogImage = $('.dialog-image img');
+    dialogImage.src = currentWine === 0 ? 'assets/images/wines-ombra-v3.jpg' : 'assets/images/wines-v2.jpg';
+    dialogImage.style.setProperty('--bottle', currentWine);
+    $('[data-wine-count]').textContent = '0' + (currentWine + 1) + ' / 04';
+    $('[data-wine-enquiry]').href = emailHref(copy[lang].enquire + ' — OBSIDIANA ' + wine.name);
+  }
+  function setLanguage(value, persist = false) {
+    lang = copy[value] ? value : 'en';
+    const t = copy[lang];
     document.documentElement.lang = lang;
-    document.querySelectorAll('[data-i18n]').forEach((element) => {
-      const value = copy[element.dataset.i18n];
-      if (value) element.textContent = value;
+    document.querySelectorAll('[data-i18n]').forEach(el => { if (t[el.dataset.i18n]) el.textContent = t[el.dataset.i18n]; });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t[el.dataset.i18nAria]));
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = t[el.dataset.i18nAlt]; });
+    document.querySelectorAll('[data-lang]').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.lang === lang)));
+    document.querySelectorAll('[data-wine]').forEach(el => {
+      const wine = wines[Number(el.dataset.wine)];
+      el.setAttribute('aria-label', t.explore + ' ' + wine.name + ' — ' + wine.type);
     });
-    document.querySelectorAll('[data-i18n-html]').forEach((element) => {
-      const value = copy[element.dataset.i18nHtml];
-      if (value) element.innerHTML = value;
-    });
-    document.querySelectorAll('[data-i18n-aria]').forEach((element) => {
-      const value = copy[element.dataset.i18nAria];
-      if (value) element.setAttribute('aria-label', value);
-    });
-    document.querySelectorAll('[data-i18n-alt]').forEach((element) => {
-      const value = copy[element.dataset.i18nAlt];
-      if (value) element.alt = value;
-    });
-    document.querySelectorAll('[data-lang]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.lang === lang)));
-    if (currentLanguage) currentLanguage.textContent = lang.toUpperCase();
-    setMeta('meta[name="description"]', copy.metaDescription);
-    setMeta('meta[property="og:locale"]', copy.locale);
-    setMeta('meta[property="og:description"]', copy.socialDescription);
-    setMeta('meta[name="twitter:description"]', copy.twitterDescription);
-    if (persist) {
-      try { localStorage.setItem('obsidiana-language-preference-v2', lang); } catch {}
-    }
-  };
-
-  const detectBrowserLanguage = () => {
-    const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
-    for (const language of browserLanguages) {
-      const code = String(language || '').toLowerCase().split('-')[0];
-      if (translations[code]) return code;
-    }
-    return 'en';
-  };
-
-  document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => {
-    setLanguage(button.dataset.lang, true);
-    languageMenu?.removeAttribute('open');
-    languageMenu?.querySelector('summary')?.focus();
+    $('[data-current-language]').textContent = lang.toUpperCase();
+    $('meta[property="og:locale"]').content = t.locale;
+    const description = 'OBSIDIANA. Maison Mediterranea. ' + t.heroLine1 + ' ' + t.heroLine2;
+    $('meta[name="description"]').content = description;
+    $('meta[property="og:description"]').content = description;
+    $('meta[name="twitter:description"]').content = description;
+    $('[data-contact-link]').href = emailHref(t.subject);
+    updateWine(currentWine);
+    if (persist) { try { localStorage.setItem('obsidiana-language-preference-v2', lang); } catch {} }
+  }
+  let preference = '';
+  try { preference = localStorage.getItem('obsidiana-language-preference-v2') || ''; } catch {}
+  const browserLanguage = String(navigator.languages?.[0] || navigator.language || 'en').split('-')[0].toLowerCase();
+  setLanguage(copy[preference] ? preference : (copy[browserLanguage] ? browserLanguage : 'en'));
+  document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => {
+    setLanguage(button.dataset.lang, true); languageMenu.open = false; languageMenu.querySelector('summary').focus();
   }));
-
-  let preferredLanguage = '';
-  try { preferredLanguage = localStorage.getItem('obsidiana-language-preference-v2') || ''; } catch {}
-  setLanguage(preferredLanguage || detectBrowserLanguage());
-
-  languageMenu?.addEventListener('toggle', () => {
-    if (languageMenu.open) mobileNav?.removeAttribute('open');
+  [languageMenu, mobileMenu].forEach(menu => menu.addEventListener('toggle', () => {
+    if (menu.open) (menu === languageMenu ? mobileMenu : languageMenu).open = false;
+  }));
+  document.addEventListener('click', event => {
+    [languageMenu, mobileMenu].forEach(menu => { if (!menu.contains(event.target)) menu.open = false; });
   });
-  mobileNav?.addEventListener('toggle', () => {
-    if (mobileNav.open) languageMenu?.removeAttribute('open');
+  mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { mobileMenu.open = false; }));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { languageMenu.open = false; mobileMenu.open = false; }
+    if (dialog.open && event.key === 'ArrowRight') updateWine(currentWine + 1);
+    if (dialog.open && event.key === 'ArrowLeft') updateWine(currentWine - 1);
   });
-  document.addEventListener('click', (event) => {
-    if (languageMenu?.open && !languageMenu.contains(event.target)) languageMenu.removeAttribute('open');
+  document.querySelectorAll('[data-wine]').forEach(button => button.addEventListener('click', () => {
+    updateWine(Number(button.dataset.wine)); dialog.showModal(); document.body.classList.add('dialog-open');
+  }));
+  $('.dialog-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); }
   });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      languageMenu?.removeAttribute('open');
-      mobileNav?.removeAttribute('open');
-    }
-  });
-
-  if (config.contactEmail && contactLink) {
-    contactLink.href = `mailto:${config.contactEmail}`;
-  }
-
+  $('[data-prev]').addEventListener('click', () => updateWine(currentWine - 1));
+  $('[data-next]').addEventListener('click', () => updateWine(currentWine + 1));
   if (config.siteUrl) {
-    const siteUrl = config.siteUrl.replace(/\/$/, '');
-    const canonical = document.createElement('link');
-    canonical.rel = 'canonical';
-    canonical.href = `${siteUrl}/`;
-    document.head.appendChild(canonical);
-
-    const metadata = [
-      ['property', 'og:url', `${siteUrl}/`],
-      ['property', 'og:image', `${siteUrl}/assets/images/sea.jpg`],
-      ['name', 'twitter:image', `${siteUrl}/assets/images/sea.jpg`]
-    ];
-    metadata.forEach(([attribute, key, value]) => {
-      const meta = document.createElement('meta');
-      meta.setAttribute(attribute, key);
-      meta.content = value;
-      document.head.appendChild(meta);
+    const url = config.siteUrl.replace(/\/$/, '');
+    const canonical = document.createElement('link'); canonical.rel = 'canonical'; canonical.href = url + '/'; document.head.appendChild(canonical);
+    [['property','og:url',url + '/'],['property','og:image',url + '/assets/images/sea.jpg'],['name','twitter:image',url + '/assets/images/sea.jpg']].forEach(([attribute,key,value]) => {
+      const meta = document.createElement('meta'); meta.setAttribute(attribute,key); meta.content = value; document.head.appendChild(meta);
     });
   }
-
-  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 32);
-  updateHeader();
-  window.addEventListener('scroll', updateHeader, { passive: true });
-
-  mobileNav?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => mobileNav.removeAttribute('open'));
-  });
-
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-  } else {
-    document.querySelectorAll('.reveal').forEach((element) => element.classList.add('is-visible'));
+  const root = document.documentElement;
+  const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+  const arrival = $('.arrival');
+  const stage = $('.arrival-stage');
+  const phrase = $('.arrival-phrase');
+  const collection = $('.collection');
+  const daylight = $('.daylight');
+  const header = $('[data-header]');
+  const clamp = value => Math.max(0, Math.min(1, value));
+  const smooth = value => { const n = clamp(value); return n * n * (3 - 2 * n); };
+  let scheduled = false;
+  function paintScroll() {
+    scheduled = false;
+    const a = arrival.getBoundingClientRect();
+    const range = Math.max(1, arrival.offsetHeight - stage.offsetHeight);
+    const p = clamp(-a.top / range);
+    if (!motionPreference.matches) {
+      const sea = smooth((p - .12) / .6);
+      const text = smooth((p - .43) / .28);
+      arrival.style.setProperty('--journey', p.toFixed(4));
+      arrival.style.setProperty('--sea', sea.toFixed(4));
+      arrival.style.setProperty('--identity', (1 - smooth(p / .36)).toFixed(4));
+      arrival.style.setProperty('--phrase', text.toFixed(4));
+      arrival.style.setProperty('--exit', smooth((p - .85) / .15).toFixed(4));
+      phrase.classList.toggle('is-active', text > .8);
+      phrase.inert = text < .5;
+      phrase.setAttribute('aria-hidden', String(text < .5));
+    } else {
+      phrase.inert = false; phrase.removeAttribute('aria-hidden');
+    }
+    const day = daylight.getBoundingClientRect();
+    header.classList.toggle('is-light', day.top < 60 && day.bottom > 60);
+    const c = collection.getBoundingClientRect();
+    collection.style.setProperty('--collection-progress', smooth((innerHeight - c.top) / (innerHeight * .7)).toFixed(4));
   }
+  function requestPaint() { if (!scheduled) { scheduled = true; requestAnimationFrame(paintScroll); } }
+  root.classList.add('js');
+  function applyMotion() { root.classList.toggle('motion', !motionPreference.matches); requestPaint(); }
+  applyMotion(); motionPreference.addEventListener('change', applyMotion);
+  window.addEventListener('scroll', requestPaint, { passive:true });
+  window.addEventListener('resize', requestPaint);
+  window.addEventListener('pageshow', requestPaint);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+    }), { threshold:.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  } else { document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible')); }
 })();
