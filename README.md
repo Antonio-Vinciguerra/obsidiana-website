@@ -4,6 +4,18 @@ Sito statico one-page responsive che traduce in una reale esperienza web la dire
 
 Il sito include contenuti completi in italiano, inglese, spagnolo e olandese. Il selettore compatto rileva automaticamente la lingua del browser al primo accesso; una scelta manuale viene ricordata e ha sempre la precedenza. I browser configurati in altre lingue ricevono automaticamente la versione inglese.
 
+## Revisione cinematografica — settembre 2026
+
+Revisione cinematografica approvata, destinata al sito pubblico https://antonio-vinciguerra.github.io/obsidiana-website/.
+
+Il percorso passa dalla soglia scura al mare, alla maison, alla collezione e alla convivialità serale. Lo scorrimento rimane nativo: dissolvenze e movimenti seguono la posizione della pagina senza bloccare i comandi del visitatore. La preferenza di sistema per il movimento ridotto disattiva la sequenza animata.
+
+Le quattro bottiglie aprono una vista ravvicinata navigabile anche da tastiera. Nomi e categorie restano invariati in tutte le lingue: OMBRA — Rosso; MERIDIO — Bianco; BREZZA — Sparkling White; AURA — Sparkling Rosé. Le immagini sono concept di presentazione, non fotografie di prodotti definitivi.
+
+Le immagini ottimizzate sono `arrival-v2.jpg`, `wines-v2.jpg`, `wines-ombra-v3.jpg` (etichetta nera di OMBRA) ed `evening-aura-v3.jpg` (AURA aperta e rosé al tramonto). Gli asset precedenti sono conservati.
+
+L’indirizzo email resta da confermare: finché `contactEmail` è vuoto, i collegamenti aprono una bozza email senza destinatario. Non sono un modulo di invio né un acquisto online.
+
 ## Struttura
 
 - `index.html` — contenuto e metadati della pagina
